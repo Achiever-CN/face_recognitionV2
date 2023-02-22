@@ -120,8 +120,11 @@ class MainWindow(QMainWindow):
                         self.timer2 = QtCore.QTimer()
                         self.timer2.start(3000)
                         self.timer2.timeout.connect(self.timer_2)
-                        action = self.action[self.pass_flag]
-                        self.page_login.label_action.setText(action)
+                        self.pass_flag = 0
+                        self.timer_2()
+                        # action = self.action[self.pass_flag]
+                        # self.pass_flag += 1
+                        # self.page_login.label_action.setText("请"+action)
                 else:
                        self.get_name()
 
@@ -132,7 +135,7 @@ class MainWindow(QMainWindow):
                 index = self.pass_flag % len(self.action)
                 action = self.action[index]
                 
-                self.page_login.label_action.setText("请",action)
+                self.page_login.label_action.setText("请"+ action)
                 if self.check_one_people():
                         if action in self.temp_action:
                                 self.pass_flag += 1
@@ -150,7 +153,6 @@ class MainWindow(QMainWindow):
                         self.pass_flag = 0
                         self.time_flag = 0
                         self.page_login.label_action.setText("请重新登录")
-
         # 通过检测后的函数
         def get_name(self):
                 self.ff.detect_face()
@@ -202,9 +204,11 @@ class MainWindow(QMainWindow):
                         self.timer3.start(3000)
                         self.timer3.timeout.connect(self.timer_3)
                         self.pass_flag = 0
-                        action = self.action[self.pass_flag]
-                        print("aaction = ", action)
-                        self.page_logup.label_action.setText(action)
+                        self.timer_3()
+                        # action = self.action[self.pass_flag]
+                        # self.pass_flag += 1
+                        # print("action = ", action)
+                        # self.page_logup.label_action.setText("请"+action)
                 else:
                        self.get_name_logup()
 
@@ -215,19 +219,20 @@ class MainWindow(QMainWindow):
                 index = self.pass_flag % len(self.action)
                 action = self.action[index]
 
-                self.page_logup.label_action.setText("请",action)
+                self.page_logup.label_action.setText("请"+ action)
                 
                 if self.check_one_people():
                         if action in self.temp_action:
                                 self.pass_flag += 1
 
                 self.time_flag += 1
+                
                 self.temp_action = []
-                if self.pass_flag >= 1:#__________________________________________________________________________________________________________
+                if self.pass_flag >= self.pass_:#__________________________________________________________________________________________________________
                        self.pass_flag = 1
                        self.timer3.stop()
                        self.page_logup.label_action.setText("Pass, 请重新点击提交")
-                if self.time_flag >= 8:
+                if self.time_flag >= self.dead_time:
                         self.timer3.stop()
                         self.pass_flag = 1
                         self.page_logup.label_action.setText("请重新注册")

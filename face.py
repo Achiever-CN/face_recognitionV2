@@ -22,7 +22,7 @@ class face_function():
                 self.name = None
 
                 self.eye_pass = 2       # 眨眼动作判定标准，值越大，动作幅度要求越大
-                self.mouse_pass = 3   # 同上
+                self.mouse_pass = 5   # 同上
 
         def load_image(self, image):
                 self.image = image
@@ -144,15 +144,16 @@ class face_function():
         def compare_distance(self):
                 self.update_disatance()
                 self.action = []
-                left_eye = abs(self.distances[0] - self.old_distances[0])
-                right_eye = abs(self.distances[1] - self.old_distances[1])
-                mouse = abs(self.distances[2] - self.old_distances[2])
-                # 下方调节判定阈值
-                if left_eye > self.eye_pass or right_eye > self.eye_pass:
-                        self.action.extend(["眨眼"])
-                if mouse > self.mouse_pass:
-                        self.action.extend(["张嘴"])
-                return self.action                    
+                if self.old_distances[0] != 0:
+                        left_eye = abs(self.distances[0] - self.old_distances[0])
+                        right_eye = abs(self.distances[1] - self.old_distances[1])
+                        mouse = abs(self.distances[2] - self.old_distances[2])
+                        # 下方调节判定阈值
+                        if left_eye > self.eye_pass or right_eye > self.eye_pass:
+                                self.action.extend(["眨眼"])
+                        if mouse > self.mouse_pass:
+                                self.action.extend(["张嘴"])
+                return self.action                      
 
 
 
