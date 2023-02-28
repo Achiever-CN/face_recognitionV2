@@ -9,6 +9,8 @@ from PyQt5 import QtCore
 import sys
 from PyQt5 import QtGui
 from face import face_function
+import numpy as np
+from datetime import datetime 
 
 
 class MainWindow(QMainWindow):
@@ -307,8 +309,15 @@ class MainWindow(QMainWindow):
                 if self.ff.face_check() == -1:
                         return
                 a = self.ff.compare_distance()
+                print('a = ', a)
                 if len(a) > 0:
                         self.temp_action.extend(a)
+                if not self.check_one_people():
+                       now = datetime.now()
+                       timestamp = now.strftime('%Y%m%d_%H%M%S')
+                       filename = f'./temp_image/{timestamp}.jpg'
+                       cv2.imwrite(filename, self.original_image)
+                       
 
         # 切换是否显示人脸特征图
         def change_show(self):
@@ -387,13 +396,18 @@ class MainWindow(QMainWindow):
         def check_one_people(self):
                 self.ff.load_image(self.original_image)
                 self.ff.get_face_locations()
-                self.user_endcoding = self.ff.get_face_encodings()
-                if not self.user_old_endcoding:
-                        self.user_old_endcoding = self.user_endcoding
-                else:
-                        if self.user_endcoding != self.user_old_endcoding:
+                self.ff.get_face_encodings()
+                self.user_endcoding = self.ff.face_encodings
+                if  self.user_old_endcoding:
+                        distance = np.linalg.norm(np.array(self.user_old_endcoding) - np.array(self.user_endcoding))
+                        if distance >= 0.4:
+                                print("distance", distance)
                                 self.message = "识别错误"
+                                print("not one people")
+                                self.user_old_endcoding = self.user_endcoding
                                 return 0
+                print("one people")
+                self.user_old_endcoding = self.user_endcoding
                 return 1
                 
 

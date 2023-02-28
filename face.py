@@ -95,7 +95,8 @@ class face_function():
                 print(self.known_face_names)
                         
 
-
+        def compare_face(self, face_know, face_encoding):
+                return face_recognition.compare_faces(face_know, face_encoding)
 
         # 比对人脸
         def detect_face(self):
@@ -107,8 +108,8 @@ class face_function():
                         
                         self.face_encoding = face_encoding
                         # See if the face is a match for the known face(s)
-                        matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
-                        print(matches)
+                        matches = self.compare_face(self.known_face_encodings, face_encoding)
+                        # print(matches)
                         # If a match was found in known_face_encodings, just use the first one.
                         if True in matches:
                                 first_match_index = matches.index(True)
