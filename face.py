@@ -142,7 +142,7 @@ class face_function():
                 
  
 
-        def compare_distance(self):
+        def get_actions(self):
                 self.update_disatance()
                 self.action = []
                 if self.old_distances[0] != 0:
